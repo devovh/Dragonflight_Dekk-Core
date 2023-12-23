@@ -1,0 +1,2 @@
+
+Core/Scripts: Move EvadeReason outside of CreatureAI class atm we dont need to do this 

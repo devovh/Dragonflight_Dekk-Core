@@ -1,0 +1,132 @@
+This text file can help fixing build errors on old scripts.	|
+Especially putting back scripts from old dekkcore to new.	|
+-------------------------------------------------------------
+----------------------------------------------------------------	
+----------------------------------------------------------------	
+----------------------------------------------------------------	
+----------------------------------------------------------------	
+
+Fix build error with abstract class problem for creature:
+
+
+
+    struct AI : public ScriptedAI
+    {
+        AI(Creature* creature) : ScriptedAI(creature) { }
+    };
+    CreatureAI* GetAI(Creature* creature) const override
+    {
+        return new AI(creature);
+    }
+	
+	
+Example:
+
+
+
+        CreatureAI* GetAI(Creature* creature) const override
+        {
+            return new mob_spirit_of_the_craneAI(creature);
+        }
+
+        struct mob_spirit_of_the_craneAI : public ScriptedAI
+        {
+            mob_spirit_of_the_craneAI(Creature* creature) : ScriptedAI(creature) { }
+        };
+----------------------------------------------------------------	
+	
+Fix build error with abstract class problem for gameobject:
+NEED TO #include "GameObjectAI.h"
+
+
+    struct AI : public GameObjectAI
+    {
+        AI(GameObject* go) : GameObjectAI(go) { }
+    };
+	GameObjectAI* GetAI(GameObject* go) const override
+    {
+        return new AI(go);
+    }
+	
+----------------------------------------------------------------	
+	
+Fix builderror for registerinstance script:
+replace replacethis text with instance script name u want to use - CTRL + H
+change the mapid
+
+
+class replacethis : public InstanceMapScript
+{
+public:
+    replacethis() : InstanceMapScript("replacethis", 2096) { }
+
+
+    InstanceScript* GetInstanceScript(InstanceMap* map) const
+    {
+        return new replacethis_InstanceMapScript(map);
+    }
+	
+    <struct goes here>
+};
+
+void AddSC_replacethis()
+{
+    new replacethis();
+}
+	
+----------------------------------------------------------------
+
+Fixing select_target_banana errors:
+
+SELECT_TARGET_MAXTHREAT is now SelectTargetMethod::MaxThreat
+SELECT_TARGET_RANDOM is now SelectTargetMethod::Random
+SELECT_TARGET_MINDISTANCE is now SelectTargetMethod::MinDistance
+
+and like this .. start typing SelectTargetMethod:: and it will popup
+you can use CTRL+H and replace old text with new in Entire Solution
+
+----------------------------------------------------------------
+
+Fixing TARGET_UNIT_CONE_ENEMY_104: replace text to TARGET_UNIT_CONE_CASTER_TO_DEST_ENEMY
+
+----------------------------------------------------------------
+
+Fixing 'PhasingHandler::AddPhase': no overloaded function takes 2 arguments 
+
+Example: 
+
+PhasingHandler::AddPhase(chest, 176); // this brings error
+PhasingHandler::AddPhase(chest, 176, true); // this one is good
+
+new argument updateVisibility (bool)
+
+----------------------------------------------------------------
+
+Fix error on SpellHit function or SpellHitTarget:
+
+void SpellHit(Unit* caster, SpellInfo const* spell) override // wrong
+void SpellHit(WorldObject* caster, SpellInfo const* spell) override // good
+
+now not only units can cast spells.. 
+
+but sometimes need to convert the caster back to unit like:
+
+caster->ToUnit()->bla bla bla
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+	
+	
+	
